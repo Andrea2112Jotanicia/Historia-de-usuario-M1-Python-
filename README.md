@@ -37,3 +37,25 @@ Run the main file:
 ```
 python app.py
 ```
+## EXPLANATION OF DESIGN DECISIONS
+
+The system is divided into three modules to ensure separation of concerns:
+
+1. Validation Methods:
+- Used to ensure correct user input.
+- Prevent runtime errors and enforce data integrity.
+
+2. Service Methods (CRUD):
+- Encapsulate business logic.
+- Allow reuse and maintainability.
+
+3. File Methods (CSV):
+- Implement persistence.
+- Use 'with' to ensure safe file handling.
+
+4. Main Loop:
+- Controls program execution.
+- Uses a boolean flag instead of infinite loops for better control.
+
+This design improves scalability, readability, and modularity.
+

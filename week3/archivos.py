@@ -7,7 +7,7 @@ import csv
 
 def guardar_csv(inventario, ruta, incluir_header=True):
     """
-    Guarda el inventario en un archivo CSV
+    Guarda el inventario en un archivo CSV manualmente
     """
     if not inventario:
         print("⚠️ No hay datos para guardar.")
@@ -29,9 +29,26 @@ def guardar_csv(inventario, ruta, incluir_header=True):
         print(f"❌ Error al guardar archivo: {e}")
 
 
+def guardar_csv_automatico(inventario, ruta):
+    """
+    Guarda automáticamente el inventario (uso interno del sistema)
+    """
+    try:
+        with open(ruta, mode="w", newline="", encoding="utf-8") as archivo:
+            writer = csv.writer(archivo)
+
+            writer.writerow(["nombre", "precio", "cantidad"])
+
+            for p in inventario:
+                writer.writerow([p["nombre"], p["precio"], p["cantidad"]])
+
+    except Exception as e:
+        print(f"❌ Error al guardar automáticamente: {e}")
+
+
 def cargar_csv(ruta):
     """
-    Carga inventario desde CSV
+    Carga inventario desde CSV con validaciones
     """
     inventario = []
     errores = 0
@@ -69,7 +86,7 @@ def cargar_csv(ruta):
         return inventario, errores
 
     except FileNotFoundError:
-        print("❌ Archivo no encontrado.")
+        return [], 0
     except UnicodeDecodeError:
         print("❌ Error de codificación.")
     except Exception as e:

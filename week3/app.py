@@ -1,6 +1,8 @@
 from servicios import *
 from archivos import *
 
+RUTA_CSV = "inventario.csv"
+
 # ================= VALIDACIONES =================
 
 def validar_string(msg):
@@ -49,7 +51,9 @@ def menu():
 
 
 def main():
-    inventario = []
+    # 🔹 Carga automática al iniciar
+    inventario, _ = cargar_csv(RUTA_CSV)
+
     control = True
 
     while control:
@@ -60,7 +64,9 @@ def main():
             nombre = validar_string("Nombre: ")
             precio = validar_float("Precio: ")
             cantidad = validar_int("Cantidad: ")
+
             agregar_producto(inventario, nombre, precio, cantidad)
+            guardar_csv_automatico(inventario, RUTA_CSV)
 
         elif op == "2":
             mostrar_inventario(inventario)
@@ -74,7 +80,9 @@ def main():
             nombre = validar_string("Producto: ")
             precio = validar_float("Nuevo precio: ")
             cantidad = validar_int("Nueva cantidad: ")
+
             if actualizar_producto(inventario, nombre, precio, cantidad):
+                guardar_csv_automatico(inventario, RUTA_CSV)
                 print("Actualizado")
             else:
                 print("No encontrado")
@@ -82,6 +90,7 @@ def main():
         elif op == "5":
             nombre = validar_string("Eliminar: ")
             if eliminar_producto(inventario, nombre):
+                guardar_csv_automatico(inventario, RUTA_CSV)
                 print("Eliminado")
             else:
                 print("No encontrado")
@@ -106,10 +115,7 @@ def main():
 
                 if decision == "s":
                     inventario = nuevos
-                    print("Inventario reemplazado")
-
                 else:
-                    # Fusión
                     for nuevo in nuevos:
                         existente = buscar_producto(inventario, nuevo["nombre"])
                         if existente:
@@ -118,8 +124,7 @@ def main():
                         else:
                             inventario.append(nuevo)
 
-                    print("Inventario fusionado")
-
+                guardar_csv_automatico(inventario, RUTA_CSV)
                 print(f"Filas inválidas: {errores}")
 
         elif op == "9":
